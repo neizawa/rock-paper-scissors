@@ -1,10 +1,14 @@
+// Randomized favicons (for fun)
+let faviconElem = document.getElementById('favicon');
+faviconElem.setAttribute('href',`./favicons/${Math.floor(3*Math.random())+1}.png`);
+
 let playerPoints = 0;
 let computerPoints = 0;
 
 let computerSelection;
 let playerSelection;
 
-startGame();
+setTimeout(function() { startGame(); }, 1000);
 
 // Asking if player wants to play game
 function startGame() {
@@ -19,30 +23,32 @@ function startGame() {
 // Starting rounds and telling player who wins entire game
 function game() {
 
-    for (let i = 0; i < 5; i++) {
-        computerSelection = computerPlay();
-        playerSelection = playerPlay();
-        playRound();
-        countScore();
-        console.log(playRound(playerSelection, computerSelection));
+    for (let i = 0; i < 1;) {
+        if (computerPoints < 5 && playerPoints < 5) {
+            computerSelection = computerPlay();
+            playerSelection = playerPlay();
+            playRound();
+            countScore();
+            console.log(playRound(playerSelection, computerSelection))
+            console.log(`Score: ${playerPoints} vs ${computerPoints}`);
+        }
+        else
+            i = Infinity;
     }
 
     if (playerPoints > computerPoints)
-        alert(`Congratulations Player, you won! Score: ${playerPoints} vs ${computerPoints}`)
-    else if (playerPoints < computerPoints)
-        alert(`Congratulations Player, you lost! Score: ${playerPoints} vs ${computerPoints}`)
+        alert(`Congratulations Player, you won!`)
     else
-        alert(`No one won! Score: ${playerPoints} vs ${computerPoints}`)
+        alert(`Congratulations Player, you lost!`)
 
     play = confirm('Do you want to start over?')
-    
     if (play === true) {
         playerPoints = 0;
         computerPoints = 0;
         game();
     }
     else
-        alert('Have a nice day!')
+        alert('Thanks for playing and have a nice day!')
 
 
 }
