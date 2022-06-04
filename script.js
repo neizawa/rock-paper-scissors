@@ -1,56 +1,52 @@
 // Randomized favicons (for fun)
 let faviconElem = document.getElementById('favicon');
-faviconElem.setAttribute('href',`./favicons/${Math.floor(3*Math.random())+1}.png`);
+faviconElem.setAttribute('href',`./images/${Math.floor(3*Math.random())+1}.png`);
 
 let playerPoints = 0;
 let computerPoints = 0;
-
 let computerSelection;
 let playerSelection;
 
-setTimeout(function() { startGame(); }, 1000);
+const buttons = document.querySelectorAll("button");
 
-// Asking if player wants to play game
-function startGame() {
-    let play = confirm('Wanna play Rock, Paper, Scissors game? Open console by pressing F12 and press OK!');
+const scoreText = document.querySelector('.score')
+console.log(`Score: ${playerPoints} vs ${computerPoints}`);
 
-    if(play === true)
-        game();
-    else
-        alert('Okay then. If you change your mind, refresh the page.')
-}
+buttons.forEach(btn => btn.addEventListener('click', e => {
+    playerSelection = (e.path[1].className)
+    game()
+    if (computerPoints === 5 || playerPoints === 5) {
+        computerPoints = 0;
+        playerPoints = 0;
+    }
+}));
+
+
 
 // Starting rounds and telling player who wins entire game
 function game() {
-
-    for (let i = 0; i < 1;) {
         if (computerPoints < 5 && playerPoints < 5) {
             computerSelection = computerPlay();
-            playerSelection = playerPlay();
-            playRound();
             countScore();
-            console.log(playRound(playerSelection, computerSelection))
-            console.log(`Score: ${playerPoints} vs ${computerPoints}`);
-        }
-        else
-            i = Infinity;
-    }
-
-    if (playerPoints > computerPoints)
-        alert(`Congratulations Player, you won!`)
-    else
-        alert(`Congratulations Player, you lost!`)
-
-    play = confirm('Do you want to start over?')
-    if (play === true) {
-        playerPoints = 0;
-        computerPoints = 0;
-        game();
-    }
-    else
-        alert('Thanks for playing and have a nice day!')
-
-
+            }
+            const result = document.querySelector('.result');
+            const newNode = result.cloneNode(true);
+            result.parentNode.replaceChild(newNode, result);
+            newNode.style.cssText = "animation: growingFont 1s;";
+            if (computerPoints < 5 && playerPoints < 5)
+                newNode.textContent = (playRound(playerSelection, computerSelection));
+            else if ((computerPoints === 5 || playerPoints === 5)) {
+                if (playerPoints > computerPoints) {
+                                        newNode.textContent = `VICTORY!`;
+                    newNode.style.cssText = "color: green; animation: growingFont 1s; font-weight: bold";
+                }
+                else {
+                                        newNode.textContent = `DEFEAT!`;
+                    newNode.style.cssText = "color: red; animation: growingFont 1s; font-weight: bold";
+                }
+            }
+        
+        scoreText.textContent = `Score: ${playerPoints} vs ${computerPoints}`;
 }
 
 // Getting value from two players and telling player who wins
@@ -108,26 +104,6 @@ function countScore() {
             computerPoints += 1;
             return computerPoints;
     }
-}
-
-// Getting value from player's input
-function playerPlay() {
-
-        let playerInput = prompt('Type rock, paper or scissors to play.', '');
-        
-        if(playerInput === null || playerInput === '') {
-            console.log('You didn\'t type anything! Try again.');
-            playerPlay();
-        }
-        else 
-            playerInput = playerInput.toLowerCase();
-        
-        if(!(playerInput === 'rock' || playerInput === 'paper' || playerInput === 'scissors') || playerInput === null) {
-            console.log('Wrong choice! Try again.');
-            playerPlay();
-        }
-        else
-            return playerSelection = playerInput;
 }
 
 // Getting random value from computer
